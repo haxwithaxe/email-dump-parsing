@@ -1,4 +1,12 @@
+""" Parse a bunch of raw email files to produce a list of easier to use Message objects.
 
+Usage:
+   ```
+   python3 -i <this script>
+   >>> messages = walk_dump(<path to dump directory>)
+   ```
+   
+"""
 from datetime import datetime as dt
 import email.parser
 import glob
@@ -43,7 +51,20 @@ def format_metadata(key, value):
 
 
 def walk_dump(dump_path, dump_metadata=False, dump_pickle=False):
-    """Iterate over the files in the dump directory and turn them into Message objects."""
+    """Iterate over the files in the dump directory and turn them into Message objects.
+    
+    Note:
+        Don't use the `dump_metadata` or `dump_pickle` and run this function again. It will contaminate `dump_path` with nonemail files.
+    
+    Arguments:
+        dump_path (str): The directory containing the email files.
+        dump_metadata (bool): If True a grepable metadata will be written to `*.metadata` alongside the email file.
+        dump_pickle (bool): If True a pickled `Module` will be written to `*.pickle` alongside the email file.
+        
+    Returns:
+        list: A list of `Message` objects for each files in `dump_path`.
+
+    """
     filenames = glob.glob(dump_path+'/*')
     messages = []
     for filename in filenames:
